@@ -4,6 +4,7 @@ The input field will be based in the value in the state
 We will use useEffect to trigger when the local state changes
 And we will update the searchterm so it will fetch new movies */
 import React, { useState, useEffect, useRef } from "react";
+import PropTypes from "prop-types";
 // Image
 import searchIcon from '../../images/search-icon.svg';
 // Styles
@@ -58,6 +59,10 @@ const SearchBar = ({ setSearchTerm }) => {
             </Content>
         </Wrapper>
     );
+};
+
+SearchBar.propTypes = {
+    setSearchTerm: PropTypes.func,
 };
 
 export default SearchBar;
