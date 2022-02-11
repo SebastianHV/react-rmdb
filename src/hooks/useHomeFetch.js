@@ -16,6 +16,8 @@ export const useHomeFetch = () => {
     const [state, setState] = useState(initialState);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(false);
+    // We have a state kind of a flag, it will trigger a  when we click the button and is set to true
+    const [isLoadingMore, setIsLoadingMore] = useState(false);
 
     // console.log(`searchTerm: ${searchTerm}`);
 
@@ -56,6 +58,15 @@ export const useHomeFetch = () => {
         fetchMovies(1, searchTerm);
     }, [searchTerm])
 
+    // Load More
+    useEffect(() =>{
+        if (!isLoadingMore) return;
+
+        fetchMovies(state.page + 1, searchTerm);
+        setIsLoadingMore(false);
+        
+    }, [isLoadingMore, searchTerm, state.page])
+
     // We return an object with their respective property/attribute name 
-    return { state, loading, error, searchTerm, setSearchTerm }
-}
+    return { state, loading, error, searchTerm, setSearchTerm, setIsLoadingMore }
+};

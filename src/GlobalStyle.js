@@ -16,7 +16,7 @@ export const GlobalStyle = createGlobalStyle`
 
     /* We set the whole page with the following */
     * {
-        box-sizing: border-bpx;
+        box-sizing: border-box;
         font-family: 'Abel', sans-serif;
     }
 
