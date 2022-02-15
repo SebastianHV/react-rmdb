@@ -2,6 +2,8 @@
 import { useState, useEffect, useRef } from 'react'
 // API
 import API from '../API'; // This will give us the object with the methods 
+// Helperos
+import { isPersistedState } from '../helpers';
 
 const initialState = {
     page: 0,
@@ -53,6 +55,20 @@ export const useHomeFetch = () => {
     // The empty array means it will only trigger when we start up the application and the Home compoennt mounts
     // Now that within the array is the searchTerm state, each time it changes, it will trigger this function
     useEffect(() => {
+        // Before we try to fetch the initialState from the API, we check if we already have a sessionStorage
+        // We make sure we don't check the sessionStorage if we are not searching for a movie
+        if (!searchTerm) {
+            // We get the sessionStorage
+            const sessionState = isPersistedState('homeState');
+            // I we have something, we set the state 
+            if (sessionState) {
+                console.log('Grabbing from sessionStorage')
+                setState(sessionState);
+                return;
+            }
+        }
+
+        console.log('Grabbing from API')
         // We have to wipe out the old state before we make a new search, so we show the new 
         setState(initialState);
         fetchMovies(1, searchTerm);
@@ -66,6 +82,14 @@ export const useHomeFetch = () => {
         setIsLoadingMore(false);
         
     }, [isLoadingMore, searchTerm, state.page])
+
+    // Write to sessionStorage
+    useEffect(() => {
+        // If we are not in a search, we don't want to write the state to the sessionStorage
+        // We stringify and save our state in the sessionState in a key called 'homeState'
+        if (!searchTerm) sessionStorage.setItem('homeState', JSON.stringify(state));
+
+    }, [searchTerm, state]);
 
     // We return an object with their respective property/attribute name 
     return { state, loading, error, searchTerm, setSearchTerm, setIsLoadingMore }

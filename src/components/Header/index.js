@@ -8,6 +8,7 @@ import TMDBLogo from '../../images/tmdb_logo.svg';
 import { Wrapper, Content, LogoImg, TMDBLogoImg } from './Header.styles';
 
 
+
 const Header = () => (
     <Wrapper>
         <Content>
@@ -20,6 +21,8 @@ const Header = () => (
         </Content>
     </Wrapper>
 );
+
+
 
 // Default export, we just have to import it with the name
 export default Header;

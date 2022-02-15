@@ -13,3 +13,13 @@ export const convertMoney = money => {
   });
   return formatter.format(money);
 };
+
+export const isPersistedState = stateName => {
+  // We can use either sessionStorage or localStorage
+  // We invoke the method getItem
+  // This will return the state from the session storage if there is a state,
+  // otherwise it will return null
+  const sessionState = sessionStorage.getItem(stateName);
+  // We have to parse the string back into JSON
+  return sessionState && JSON.parse(sessionState);
+}
