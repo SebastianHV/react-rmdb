@@ -1,5 +1,5 @@
 // Here, we don't import react because we don't need the react library
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 // API
 import API from '../API'; // This will give us the object with the methods 
 // Helperos
