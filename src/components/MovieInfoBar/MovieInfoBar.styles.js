@@ -22,16 +22,19 @@ export const Content = styled.div`
         border-radius: 20px;
         margin: 0 20px;
         flex: 1;
-    }
 
-    :first-child {
+        :first-child {
         margin-left: 0;
-    }
+        }
 
-    :last-child {
+        :last-child {
         margin-right: 0;
+        }
+
+
     }
 
+    
     @media screen and (max-width: 768px) {
         display: block;
 
