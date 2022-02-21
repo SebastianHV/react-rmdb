@@ -3,62 +3,62 @@ We will have our input field controlled by Reatc
 The input field will be based in the value in the state
 We will use useEffect to trigger when the local state changes
 And we will update the searchterm so it will fetch new movies */
-import React, { useState, useEffect, useRef } from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
 // Image
 import searchIcon from '../../images/search-icon.svg';
 // Styles
 import { Wrapper, Content } from './SearchBar.styles';
 
-const SearchBar = ({ setSearchTerm }) => {
+// Everytime we tyope something in, we are gonna set the state
+// and that will update the component and it will trigger the componentDidUpdate funtion
+
+class SearchBar extends Component {
     // This state will store the value of the input field
-    const [state, setState] = useState('');
+    // Babel and Webpack will make sure it transiples corrwectly, we don't need a constructor
+    state = { value: '' };
+    timeout = null;
 
-    // We want to trigger fetch when the user has typed something in
-    // So when we call the useRef hook, it will create a mutable value for us that youccan compare to something similar
-    // as a mutable variable
-    const initial = useRef(true);
+    // We martk with an underscore prevProps because we are not going to use them 
+    // This function will trigger in each update of the component
+    componentDidUpdate(_prevProps, prevState) {
+        // If the value in the state is not same as te previous one, we make the following
+        if (this.state.value !== prevState.value) {
+            const { setSearchTerm } = this.props;
 
-    // The actual value will be in the 'initial.current' property
-    // This property will hold the value 'true'
+            clearTimeout(this.timeout);
 
-    // This hook will trigger on the initial render
-    useEffect(() => {
-
-        // If this is the inital rerender, it will change the ref value to false and then, it will return
-        if (initial.current) {
-            // We can mutate this value directly
-            // It won't trigger a rerender
-            initial.current = false
-            return
+            // We use a timer each time the value in the input field changes, so it can wait 500ms until the searchTerm changes (via setSearchTerm)
+            this.timeout = setTimeout(() => {
+                const { value } = this.state;
+                setSearchTerm(value);
+            }, 500)
         }
+    }
 
-        // We use a timer each time the value in the input field changes, so it can wait 500ms until the searchTerm changes (via setSearchTerm)
-        const timer = setTimeout(() => {
-            setSearchTerm(state);
-        }, 500)
+    render() {
 
-        // We clear our timer in each render, so we only have 1 timer
-        return () => clearTimeout(timer);
+        // We can destructure the state
+        const { value } = this.state.value;
 
-    },[setSearchTerm, state])
-
-    return (
-        <Wrapper>
-            <Content>
-                <img src={searchIcon} alt="search-icon" />
-                <input
-                    type="text"
-                    placeholder="Search Movie"
-                    // Event handler
-                    // event.currentTarget.value will give us the current value in the input field
-                    onChange={event => setState(event.currentTarget.value)}
-                    // We set the value to the state
-                    value={state}
-                />
-            </Content>
-        </Wrapper>
-    );
+        return (
+            <Wrapper>
+                <Content>
+                    <img src={searchIcon} alt="search-icon" />
+                    <input
+                        type="text"
+                        placeholder="Search Movie"
+                        // Event handler
+                        // event.currentTarget.value will give us the current value in the input field
+                        // We set the value in the state when we type something in
+                        onChange={event => this.setState( { value : event.currentTarget.value })}
+                        // We set the value of the inpuit field from the value in the state
+                        value={value}
+                    />
+                </Content>
+            </Wrapper >
+        );
+    }
 };
 
 SearchBar.propTypes = {
